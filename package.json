@@ -1,0 +1,30 @@
+{
+  "name": "Route-planner",
+  "version": "0.0.0",
+  "description": "A basic route planning app",
+  "main": "index.js",
+  "dependencies": {
+    "browserify": "^7.0.3",
+    "gulp": "^3.8.10"
+  },
+  "devDependencies": {
+    "browserify": "^7.0.3",
+    "gulp": "^3.8.10",
+    "reactify": "^0.17.1",
+    "vinyl-source-stream": "^1.0.0",
+    "watchify": "^2.2.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/austentalbot/Route-planner.git"
+  },
+  "author": "Austen Talbot",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/austentalbot/Route-planner/issues"
+  },
+  "homepage": "https://github.com/austentalbot/Route-planner"
+}

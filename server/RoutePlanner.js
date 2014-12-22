@@ -23,9 +23,9 @@ RoutePlanner.prototype.findRoute = function() {
   var closestDistance, closestPoint;
   var that = this;
   this.stops.forEach(function(stop) {
-    var distance;
     //only calculate if one of the points has not been hit
     if (!stop.droppedOff) {
+      var distance;
       //if hasn't been picked up yet
       if (!stop.pickedUp) {
         distance = that.calculateDistance(that.currentPoint, stop.start);
@@ -39,7 +39,6 @@ RoutePlanner.prototype.findRoute = function() {
     }
   });
 
-  console.log(closestDistance);
   if (closestDistance!==undefined) {
     if (!closestPoint.pickedUp) {
       this.currentPoint = closestPoint.start;
@@ -50,8 +49,6 @@ RoutePlanner.prototype.findRoute = function() {
     }
     this.finalRoute.push(this.currentPoint);
     this.totalRouteLength += closestDistance;
-    closestDistance = undefined;
-    closestPoint = undefined;
 
     //recurse
     return this.findRoute();
