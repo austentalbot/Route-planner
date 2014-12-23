@@ -33,7 +33,7 @@ var CoordInputForm = module.exports = React.createClass({
           coordB = parseFloat(document.getElementById('inputB'+i).value);
           allCoordinates.push([coordA, coordB]);
         }
-        console.log(allCoordinates);
+        console.log(allCoordinates); //send allCoordinates to server
         that.setState(that.getInitialState());
       }
     }, 'Submit');

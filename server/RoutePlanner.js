@@ -1,8 +1,16 @@
 //Create route planner
 
-var RoutePlanner = function(stops) {
-  //accepts array of Routes
-  this.stops = stops;
+var RoutePlanner = function(stops, convertToRoute) {
+  //accepts array of Routes or tuples to be converted to Routes
+  if(!convertToRoute)  {
+    this.stops = stops;
+  } else {
+    routifiedStops = [];
+    stops.forEach(function(stop) {
+      routifiedStops.push(new Route(stop[0], stop[1]));
+    });
+    this.stops = routifiedStops;
+  }
   this.finalRoute = [];
   this.totalRouteLength = 0;
 
@@ -56,11 +64,15 @@ RoutePlanner.prototype.findRoute = function() {
   return this.finalRoute;
 };
 
-var routeA = new Route([0, 0], [4, 4]);
-var routeB = new Route([0, 1], [2, 3]);
-var routeC = new Route([3, 2], [4, 3]);
+// var routeA = [[0, 0], [4, 4]];
+// var routeB = [[0, 1], [2, 3]];
+// var routeC = [[3, 2], [4, 3]];
 
-var planA = new RoutePlanner([routeA, routeB, routeC]);
-planA.findRoute();
+// // var routeA = new Route([0, 0], [4, 4]);
+// // var routeB = new Route([0, 1], [2, 3]);
+// // var routeC = new Route([[3, 2], [4, 3]]);
+
+// var planA = new RoutePlanner([routeA, routeB, routeC], true);
+// planA.findRoute();
 
 module.exports = RoutePlanner;
