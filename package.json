@@ -4,9 +4,13 @@
   "description": "A basic route planning app",
   "main": "index.js",
   "dependencies": {
+    "body-parser": "^1.10.0",
     "browserify": "^7.0.3",
+    "cors": "^2.5.2",
+    "express": "^4.10.6",
     "gulp": "^3.8.10",
-    "react": "^0.12.2"
+    "react": "^0.12.2",
+    "reqwest": "^1.1.5"
   },
   "devDependencies": {
     "browserify": "^7.0.3",

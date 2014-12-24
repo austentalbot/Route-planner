@@ -8,11 +8,19 @@ var CoordInput = module.exports = React.createClass({
       children: [
         'Insert coordinates:',
         R('input', {
-          id: 'inputA' + this.props.idNum,
+          id: 'inputLatStart' + this.props.idNum,
           type: 'text'
         }),
         R('input', {
-          id: 'inputB' + this.props.idNum,
+          id: 'inputLngStart' + this.props.idNum,
+          type: 'text'
+        }),
+        R('input', {
+          id: 'inputLatEnd' + this.props.idNum,
+          type: 'text'
+        }),
+        R('input', {
+          id: 'inputLngEnd' + this.props.idNum,
           type: 'text'
         }),
       ]

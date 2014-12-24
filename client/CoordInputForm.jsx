@@ -1,5 +1,6 @@
 var React = require('react');
 var R = React.createElement;
+var reqwest = require('reqwest');
 var CoordInput = require('./CoordInput.jsx');
 
 var CoordInputForm = module.exports = React.createClass({
@@ -29,12 +30,27 @@ var CoordInputForm = module.exports = React.createClass({
         var allCoordinates = [];
         var coordA, coordB;
         for (var i=0; i<that.state.coords; i++) {
-          coordA = parseFloat(document.getElementById('inputA'+i).value);
-          coordB = parseFloat(document.getElementById('inputB'+i).value);
-          allCoordinates.push([coordA, coordB]);
+          latStart = parseFloat(document.getElementById('inputLatStart'+i).value);
+          lngStart = parseFloat(document.getElementById('inputLngStart'+i).value);
+          latEnd = parseFloat(document.getElementById('inputLatEnd'+i).value);
+          lngEnd = parseFloat(document.getElementById('inputLngEnd'+i).value);
+          allCoordinates.push([[latStart, lngStart], [latEnd, lngEnd]]);
         }
         console.log(allCoordinates); //send allCoordinates to server
         that.setState(that.getInitialState());
+        reqwest({
+          url: 'http://localhost:6007',
+          method: 'post',
+          data: {
+            coordinates: allCoordinates
+          },
+          error: function(err) {
+            console.log(err);
+          },
+          success: function (resp) {
+            console.log(resp);
+          }
+        });
       }
     }, 'Submit');
 
