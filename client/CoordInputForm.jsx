@@ -54,6 +54,19 @@ var CoordInputForm = module.exports = React.createClass({
         });
       }
     }, 'Submit');
+
+    var clearButton = R('button', {
+      onClick: function() {
+        //reset state to show only one input
+        that.replaceState(that.getInitialState());
+
+        //clear remaining input box
+        document.getElementById('inputLatStart0').value = '';
+        document.getElementById('inputLngStart0').value = '';
+        document.getElementById('inputLatEnd0').value = '';
+        document.getElementById('inputLngEnd0').value = '';
+      }
+    }, 'Clear');
     
     var titles = R('div', {
       children: ['Start latitude', 'Start longitude', 'End latitude', 'End longitude']
@@ -63,7 +76,7 @@ var CoordInputForm = module.exports = React.createClass({
 
     return R('div', {
       className: 'coordInputForm',
-      children: [addButton, submitButton, titles].concat(this.inputs).concat(route)
+      children: [addButton, submitButton, clearButton, titles].concat(this.inputs).concat(route)
     });
   }
 });
