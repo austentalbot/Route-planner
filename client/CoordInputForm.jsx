@@ -25,7 +25,7 @@ var CoordInputForm = module.exports = React.createClass({
       }
     }, 'Add another point');
 
-    var submitButton = R('button', {
+    var generateRouteButton = R('button', {
       onClick: function() {
         //submit values
         var allCoordinates = [];
@@ -39,7 +39,7 @@ var CoordInputForm = module.exports = React.createClass({
         }
         console.log(allCoordinates); //send allCoordinates to server
         reqwest({
-          url: 'http://localhost:6007/createRoute',
+          url: 'http://localhost:6007/generateRoute',
           method: 'post',
           data: {
             coordinates: allCoordinates
@@ -53,7 +53,37 @@ var CoordInputForm = module.exports = React.createClass({
           }
         });
       }
-    }, 'Submit');
+    }, 'Generate route');
+
+    var calculateSimilarityButton = R('button', {
+      onClick: function() {
+        //submit values
+        var allCoordinates = [];
+        var coordA, coordB;
+        for (var i=0; i<that.state.coords; i++) {
+          latStart = parseFloat(document.getElementById('inputLatStart'+i).value);
+          lngStart = parseFloat(document.getElementById('inputLngStart'+i).value);
+          latEnd = parseFloat(document.getElementById('inputLatEnd'+i).value);
+          lngEnd = parseFloat(document.getElementById('inputLngEnd'+i).value);
+          allCoordinates.push([[latStart, lngStart], [latEnd, lngEnd]]);
+        }
+        console.log(allCoordinates); //send allCoordinates to server
+        reqwest({
+          url: 'http://localhost:6007/calculateSimilarity',
+          method: 'post',
+          data: {
+            coordinates: allCoordinates
+          },
+          error: function(err) {
+            console.log(err);
+          },
+          success: function (resp) {
+            console.log(JSON.stringify(resp));
+            // that.setState({similarity: JSON.stringify(resp)});
+          }
+        });
+      }
+    }, 'Calculate path similarity');
 
     var clearButton = R('button', {
       onClick: function() {
@@ -76,7 +106,13 @@ var CoordInputForm = module.exports = React.createClass({
 
     return R('div', {
       className: 'coordInputForm',
-      children: [addButton, submitButton, clearButton, titles].concat(this.inputs).concat(route)
+      children: [
+        addButton,
+        generateRouteButton,
+        calculateSimilarityButton,
+        clearButton,
+        titles
+      ].concat(this.inputs).concat(route)
     });
   }
 });

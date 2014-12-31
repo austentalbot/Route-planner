@@ -6,7 +6,7 @@ var CoordInput = module.exports = React.createClass({
     return R('div', {
       className: 'coordInput',
       children: [
-        'Insert coordinates:',
+        'Path ' + this.props.idNum + ':',
         R('input', {
           id: 'inputLatStart' + this.props.idNum,
           type: 'text'
