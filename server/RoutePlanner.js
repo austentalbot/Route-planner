@@ -1,4 +1,4 @@
-//Create route planner
+var Route = require('./Route.js');
 
 var RoutePlanner = function(stops, convertToRoute) {
   //accepts array of Routes or tuples to be converted to Routes

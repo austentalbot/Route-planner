@@ -39,7 +39,7 @@ var CoordInputForm = module.exports = React.createClass({
         console.log(allCoordinates); //send allCoordinates to server
         that.setState(that.getInitialState());
         reqwest({
-          url: 'http://localhost:6007',
+          url: 'http://localhost:6007/createRoute',
           method: 'post',
           data: {
             coordinates: allCoordinates
@@ -57,6 +57,6 @@ var CoordInputForm = module.exports = React.createClass({
     return R('div', {
       className: 'coordInputForm',
       children: this.inputs.concat([addButton, submitButton])
-    })
+    });
   }
 });
