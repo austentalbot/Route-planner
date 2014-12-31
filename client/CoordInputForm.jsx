@@ -10,7 +10,8 @@ var CoordInputForm = module.exports = React.createClass({
   getInitialState: function() {
     this.setInitialInputs();
     return {
-      coords: 1
+      coords: 1,
+      route: undefined
     };
   },
   render: function() {
@@ -37,7 +38,6 @@ var CoordInputForm = module.exports = React.createClass({
           allCoordinates.push([[latStart, lngStart], [latEnd, lngEnd]]);
         }
         console.log(allCoordinates); //send allCoordinates to server
-        that.setState(that.getInitialState());
         reqwest({
           url: 'http://localhost:6007/createRoute',
           method: 'post',
@@ -48,15 +48,22 @@ var CoordInputForm = module.exports = React.createClass({
             console.log(err);
           },
           success: function (resp) {
-            console.log(resp);
+            console.log(JSON.stringify(resp));
+            that.setState({route: JSON.stringify(resp)});
           }
         });
       }
     }, 'Submit');
+    
+    var titles = R('div', {
+      children: ['Start latitude', 'Start longitude', 'End latitude', 'End longitude']
+    });
+
+    var route = this.state.route !== undefined ? 'Route: ' + this.state.route : '';
 
     return R('div', {
       className: 'coordInputForm',
-      children: this.inputs.concat([addButton, submitButton])
+      children: [addButton, submitButton, titles].concat(this.inputs).concat(route)
     });
   }
 });

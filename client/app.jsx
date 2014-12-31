@@ -4,7 +4,9 @@ var CoordInputForm = require('./CoordInputForm.jsx');
 
 var App = React.createClass({
   render: function() {
-    return R(CoordInputForm);
+    return R('div', {
+      children: ['Route planner', R(CoordInputForm)]
+    });
   }
 });
 
