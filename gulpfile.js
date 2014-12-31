@@ -2,7 +2,7 @@ var gulp = require('gulp');
 var source = require('vinyl-source-stream'); // Used to stream bundle for further handling
 var browserify = require('browserify');
 var watchify = require('watchify');
-var reactify = require('reactify'); 
+var reactify = require('reactify');
  
 gulp.task('browserify', function() {
   var bundler = browserify({
@@ -27,6 +27,4 @@ gulp.task('browserify', function() {
   .pipe(gulp.dest('./public/build/'));
 });
 
-
-// Just running the two tasks
 gulp.task('default', ['browserify']);

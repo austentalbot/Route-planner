@@ -11,7 +11,8 @@ var CoordInputForm = module.exports = React.createClass({
     this.setInitialInputs();
     return {
       coords: 1,
-      route: undefined
+      route: undefined,
+      similarity: undefined
     };
   },
   render: function() {
@@ -37,7 +38,7 @@ var CoordInputForm = module.exports = React.createClass({
           lngEnd = parseFloat(document.getElementById('inputLngEnd'+i).value);
           allCoordinates.push([[latStart, lngStart], [latEnd, lngEnd]]);
         }
-        console.log(allCoordinates); //send allCoordinates to server
+        console.log(allCoordinates);
         reqwest({
           url: 'http://localhost:6007/generateRoute',
           method: 'post',
@@ -49,7 +50,7 @@ var CoordInputForm = module.exports = React.createClass({
           },
           success: function (resp) {
             console.log(JSON.stringify(resp));
-            that.setState({route: JSON.stringify(resp)});
+            that.setState({route: JSON.stringify(resp), similarity: undefined});
           }
         });
       }
@@ -79,7 +80,7 @@ var CoordInputForm = module.exports = React.createClass({
           },
           success: function (resp) {
             console.log(JSON.stringify(resp));
-            // that.setState({similarity: JSON.stringify(resp)});
+            that.setState({route: undefined, similarity: resp});
           }
         });
       }
@@ -103,6 +104,22 @@ var CoordInputForm = module.exports = React.createClass({
     });
 
     var route = this.state.route !== undefined ? 'Route: ' + this.state.route : '';
+    var similarity = '';
+    if (this.state.similarity !== undefined) {
+      var similarityChildren = [R('div', {}, 'Route similarities:')];
+      var val, v;
+      for (var key in this.state.similarity) {
+        val = this.state.similarity[key];
+        for (var k in val) {
+          v = val[k];
+          similarityChildren.push(R('div', {}, 'Path ' + key + ' / Path ' + k + ' similarity: ' + JSON.stringify(v)));
+        }
+      }
+
+      similarity = R('div', {
+        children: similarityChildren
+      });
+    }
 
     return R('div', {
       className: 'coordInputForm',
@@ -112,7 +129,7 @@ var CoordInputForm = module.exports = React.createClass({
         calculateSimilarityButton,
         clearButton,
         titles
-      ].concat(this.inputs).concat(route)
+      ].concat(this.inputs).concat([route, similarity])
     });
   }
 });
