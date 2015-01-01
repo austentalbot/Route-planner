@@ -11,6 +11,12 @@ html {
   margin-right: 15px;
 }
 
+.map {
+  height: 500px;
+  margin: 0 auto;
+  width: 90%;
+}
+
 /* hide input placeholder on focuse */
 input:focus::-webkit-input-placeholder { color:transparent; }
 input:focus:-moz-placeholder { color:transparent; } /* Firefox 18- */
