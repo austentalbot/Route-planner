@@ -6,7 +6,7 @@ var InputMap = module.exports = React.createClass({
   componentDidMount: function() {
     var map = this.map = L.map(this.getDOMNode(), {zoomControl: false, attributionControl: false}).setView([37.789, -122.414], 12);
     new L.Control.Zoom({ position: 'bottomleft' }).addTo(map);
-    L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {}).addTo(map);
+    L.tileLayer('http://api.tiles.mapbox.com/v3/jnamgoong.kkpahlbc/{z}/{x}/{y}.png', {}).addTo(map);
 
     map.on('click', this.onMapClick);
   },
