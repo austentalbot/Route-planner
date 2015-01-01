@@ -24,7 +24,7 @@ var CoordInputForm = module.exports = React.createClass({
           coords: that.state.coords + 1
         });
       }
-    }, 'Add another point');
+    }, 'Add path');
 
     var generateRouteButton = R('button', {
       onClick: function() {
@@ -50,7 +50,7 @@ var CoordInputForm = module.exports = React.createClass({
           },
           success: function (resp) {
             console.log(JSON.stringify(resp));
-            that.setState({route: JSON.stringify(resp), similarity: undefined});
+            that.setState({route: resp, similarity: undefined});
           }
         });
       }
@@ -99,10 +99,19 @@ var CoordInputForm = module.exports = React.createClass({
       }
     }, 'Clear');
 
-    var route = this.state.route !== undefined ? 'Route: ' + this.state.route : '';
+    var route = '';
+    if (this.state.route !== undefined) {
+      var routeChildren = [R('div', {}, 'Route:')];
+      this.state.route.forEach(function(val, key) {
+        routeChildren.push(R('div', {}, ['Stop ', key, ': (', val, ')'].join('')));
+      });
+      route = R('div', {
+        children: routeChildren
+      });
+    }
     var similarity = '';
     if (this.state.similarity !== undefined) {
-      var similarityChildren = [R('div', {}, 'Route similarities:')];
+      var similarityChildren = [R('div', {}, 'Path similarities:')];
       var val, v;
       for (var key in this.state.similarity) {
         val = this.state.similarity[key];
