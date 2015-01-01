@@ -98,10 +98,6 @@ var CoordInputForm = module.exports = React.createClass({
         document.getElementById('inputLngEnd0').value = '';
       }
     }, 'Clear');
-    
-    var titles = R('div', {
-      children: ['Start latitude', 'Start longitude', 'End latitude', 'End longitude']
-    });
 
     var route = this.state.route !== undefined ? 'Route: ' + this.state.route : '';
     var similarity = '';
@@ -127,8 +123,7 @@ var CoordInputForm = module.exports = React.createClass({
         addButton,
         generateRouteButton,
         calculateSimilarityButton,
-        clearButton,
-        titles
+        clearButton
       ].concat(this.inputs).concat([route, similarity])
     });
   }
