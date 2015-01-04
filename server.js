@@ -26,6 +26,7 @@ app.post('/calculateSimilarity', function(req, res){
 });
 
 app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/node_modules'));
 
 var server = app.listen(port, function(){
   console.log('Server is listening on port ' + port);
