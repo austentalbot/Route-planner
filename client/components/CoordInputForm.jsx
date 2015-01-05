@@ -2,7 +2,7 @@ var React = require('react');
 var R = React.createElement;
 var reqwest = require('reqwest');
 var CoordInput = require('./CoordInput.jsx');
-var AppDispatcher = require('./dispatcher/AppDispatcher.js');
+var AppDispatcher = require('../dispatcher/AppDispatcher.js');
 
 var CoordInputForm = module.exports = React.createClass({
   setInitialInputs: function() {
