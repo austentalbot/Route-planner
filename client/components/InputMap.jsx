@@ -25,12 +25,12 @@ var InputMap = module.exports = React.createClass({
     console.log('clicked', e);
     var marker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(this.map);
     if (!this.state.hasSetStart) {
-      document.getElementById('inputLatStart' + (this.props.coordCount - 1)).value = e.latlng.lat;
-      document.getElementById('inputLngStart' + (this.props.coordCount - 1)).value = e.latlng.lng;
+      document.getElementById('inputLatStart' + (this.props.coordCount - 1)).value = Number(e.latlng.lat.toFixed(7));
+      document.getElementById('inputLngStart' + (this.props.coordCount - 1)).value = Number(e.latlng.lat.toFixed(7));
       this.setState({hasSetStart: true});
     } else {
-      document.getElementById('inputLatEnd' + (this.props.coordCount - 1)).value = e.latlng.lat;
-      document.getElementById('inputLngEnd' + (this.props.coordCount - 1)).value = e.latlng.lng;
+      document.getElementById('inputLatEnd' + (this.props.coordCount - 1)).value = Number(e.latlng.lat.toFixed(7));
+      document.getElementById('inputLngEnd' + (this.props.coordCount - 1)).value = Number(e.latlng.lng.toFixed(7));
       AppDispatcher.handleViewAction({
         actionType: 'INCREMENT_COORD_COUNT'
       });

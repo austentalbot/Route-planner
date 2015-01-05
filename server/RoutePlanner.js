@@ -1,4 +1,5 @@
 var Route = require('./Route.js');
+var ConvertCoords = require('./ConvertCoords.js');
 
 var RoutePlanner = function(stops, convertToRoute) {
   //accepts array of Routes or tuples to be converted to Routes
@@ -7,7 +8,12 @@ var RoutePlanner = function(stops, convertToRoute) {
   } else {
     routifiedStops = [];
     stops.forEach(function(stop) {
-      routifiedStops.push(new Route(stop[0], stop[1]));
+      // routifiedStops.push(new Route(stop[0], stop[1]));
+      console.log('stop', stop);
+      routifiedStops.push(new Route(
+        ConvertCoords.latLngToMercator({lat: stop[0][0], lng: stop[0][1]}, true),
+        ConvertCoords.latLngToMercator({lat: stop[1][0], lng: stop[1][1]}, true)
+      ));
     });
     this.stops = routifiedStops;
   }
@@ -16,7 +22,9 @@ var RoutePlanner = function(stops, convertToRoute) {
 
   //set up starting point
   this.currentPoint = this.stops[0].start;
-  this.finalRoute.push(this.currentPoint);
+  // this.finalRoute.push(this.currentPoint);
+  console.log('current point', this.currentPoint);
+  this.finalRoute.push(ConvertCoords.mercatorToLatLng({x: this.currentPoint[0], y: this.currentPoint[1]}, true));
   this.stops[0].pickUp();
 };
 
@@ -55,7 +63,8 @@ RoutePlanner.prototype.findRoute = function() {
       this.currentPoint = closestPoint.end;
       closestPoint.dropOff();
     }
-    this.finalRoute.push(this.currentPoint);
+    // this.finalRoute.push(this.currentPoint);
+    this.finalRoute.push(ConvertCoords.mercatorToLatLng({x: this.currentPoint[0], y: this.currentPoint[1]}, true));
     this.totalRouteLength += closestDistance;
 
     //recurse
