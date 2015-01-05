@@ -22,7 +22,11 @@ var MainApp = module.exports = React.createClass({
   },
   render: function() {
     return R('div', {
-      children: [R('h1', {}, 'Route planner'), R(CoordInputForm, {coordCount: this.state.coordCount}), R(InputMap)]
+      children: [
+        R('h1', {}, 'Route planner'),
+        R(CoordInputForm, {coordCount: this.state.coordCount}),
+        R(InputMap, {coordCount: this.state.coordCount})
+      ]
     });
   }
 });

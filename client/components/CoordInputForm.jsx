@@ -5,11 +5,7 @@ var CoordInput = require('./CoordInput.jsx');
 var AppDispatcher = require('../dispatcher/AppDispatcher.js');
 
 var CoordInputForm = module.exports = React.createClass({
-  setInitialInputs: function() {
-    this.inputs = [R(CoordInput, {idNum: 0})];
-  },
   getInitialState: function() {
-    this.setInitialInputs();
     return {
       route: undefined,
       similarity: undefined
@@ -19,7 +15,6 @@ var CoordInputForm = module.exports = React.createClass({
     var that = this;
     var addButton = R('button', {
       onClick: function() {
-        that.inputs.push(R(CoordInput, {idNum: that.props.coordCount}));
         AppDispatcher.handleViewAction({
           actionType: 'INCREMENT_COORD_COUNT'
         });
@@ -131,6 +126,10 @@ var CoordInputForm = module.exports = React.createClass({
       });
     }
 
+    var inputs = [];
+    for (var i = 0; i<that.props.coordCount; i++) {
+      inputs.push(R(CoordInput, {idNum: i}));
+    }
     return R('div', {
       className: 'coordInputForm',
       children: [
@@ -138,7 +137,7 @@ var CoordInputForm = module.exports = React.createClass({
         generateRouteButton,
         calculateSimilarityButton,
         clearButton
-      ].concat(this.inputs).concat([route, similarity])
+      ].concat(inputs).concat([route, similarity])
     });
   }
 });
