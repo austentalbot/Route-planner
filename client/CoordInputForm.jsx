@@ -2,6 +2,7 @@ var React = require('react');
 var R = React.createElement;
 var reqwest = require('reqwest');
 var CoordInput = require('./CoordInput.jsx');
+var AppDispatcher = require('./dispatcher/AppDispatcher.js');
 
 var CoordInputForm = module.exports = React.createClass({
   setInitialInputs: function() {
@@ -10,7 +11,6 @@ var CoordInputForm = module.exports = React.createClass({
   getInitialState: function() {
     this.setInitialInputs();
     return {
-      coords: 1,
       route: undefined,
       similarity: undefined
     };
@@ -19,9 +19,9 @@ var CoordInputForm = module.exports = React.createClass({
     var that = this;
     var addButton = R('button', {
       onClick: function() {
-        that.inputs.push(R(CoordInput, {idNum: that.state.coords}));
-        that.setState({
-          coords: that.state.coords + 1
+        that.inputs.push(R(CoordInput, {idNum: that.props.coordCount}));
+        AppDispatcher.handleViewAction({
+          actionType: 'INCREMENT_COORD_COUNT'
         });
       }
     }, 'Add path');
@@ -31,7 +31,7 @@ var CoordInputForm = module.exports = React.createClass({
         //submit values
         var allCoordinates = [];
         var coordA, coordB;
-        for (var i=0; i<that.state.coords; i++) {
+        for (var i=0; i<that.props.coordCount; i++) {
           latStart = parseFloat(document.getElementById('inputLatStart'+i).value);
           lngStart = parseFloat(document.getElementById('inputLngStart'+i).value);
           latEnd = parseFloat(document.getElementById('inputLatEnd'+i).value);
@@ -61,7 +61,7 @@ var CoordInputForm = module.exports = React.createClass({
         //submit values
         var allCoordinates = [];
         var coordA, coordB;
-        for (var i=0; i<that.state.coords; i++) {
+        for (var i=0; i<that.props.coordCount; i++) {
           latStart = parseFloat(document.getElementById('inputLatStart'+i).value);
           lngStart = parseFloat(document.getElementById('inputLngStart'+i).value);
           latEnd = parseFloat(document.getElementById('inputLatEnd'+i).value);
@@ -90,6 +90,11 @@ var CoordInputForm = module.exports = React.createClass({
       onClick: function() {
         //reset state to show only one input
         that.replaceState(that.getInitialState());
+
+        //reset coord count in store
+        AppDispatcher.handleViewAction({
+          actionType: 'RESET_COORD_COUNT'
+        });
 
         //clear remaining input box
         document.getElementById('inputLatStart0').value = '';

@@ -19,6 +19,9 @@ var CoordStore = merge(EventEmitter.prototype, {
   decrementCoordCount: function() {
     _coordCount--;
   },
+  resetCoordCount: function() {
+    _coordCount = 1;
+  },
   getCoords: function() {
     return _coords;
   },
@@ -41,10 +44,14 @@ AppDispatcher.register(function(payload) {
   var action = payload.action;
   // Define what to do for certain actions
   if (action.actionType === 'LOAD_COORDS') {
-    // Call internal method based upon dispatched action
     loadCoords(action.data);
-
     // If action was acted upon, emit change event
+    CoordStore.emitChange();
+  } else if (action.actionType === 'INCREMENT_COORD_COUNT') {
+    CoordStore.incrementCoordCount();
+    CoordStore.emitChange();
+  } else if (action.actionType === 'RESET_COORD_COUNT') {
+    CoordStore.resetCoordCount();
     CoordStore.emitChange();
   }
   
