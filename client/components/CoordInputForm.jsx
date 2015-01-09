@@ -15,9 +15,18 @@ var CoordInputForm = module.exports = React.createClass({
     var that = this;
     var addButton = R('button', {
       onClick: function() {
-        AppDispatcher.handleViewAction({
-          actionType: 'INCREMENT_COORD_COUNT'
-        });
+        var latStart = document.getElementById('inputLatStart' + (that.props.coordCount - 1)).value;
+        var lngStart = document.getElementById('inputLngStart' + (that.props.coordCount - 1)).value;
+        var latEnd = document.getElementById('inputLatEnd' + (that.props.coordCount - 1)).value;
+        var lngEnd = document.getElementById('inputLngEnd' + (that.props.coordCount - 1)).value;
+        //only add new input if the previous one is complete
+        if (latStart && lngStart && latEnd && lngEnd) {
+          AppDispatcher.handleViewAction({
+            actionType: 'INCREMENT_COORD_COUNT'
+          });
+        } else {
+          alert('Please input coordinates first');
+        }
       }
     }, 'Add path');
 
@@ -25,13 +34,15 @@ var CoordInputForm = module.exports = React.createClass({
       onClick: function() {
         //submit values
         var allCoordinates = [];
-        var coordA, coordB;
+        var coordA, coordB, latStart, lngStart, latEnd, lngEnd;
         for (var i=0; i<that.props.coordCount; i++) {
           latStart = parseFloat(document.getElementById('inputLatStart'+i).value);
           lngStart = parseFloat(document.getElementById('inputLngStart'+i).value);
           latEnd = parseFloat(document.getElementById('inputLatEnd'+i).value);
           lngEnd = parseFloat(document.getElementById('inputLngEnd'+i).value);
-          allCoordinates.push([[latStart, lngStart], [latEnd, lngEnd]]);
+          if (latStart && lngStart && latEnd && lngEnd) {
+            allCoordinates.push([[latStart, lngStart], [latEnd, lngEnd]]);
+          }
         }
         console.log(allCoordinates);
         reqwest({
@@ -55,13 +66,15 @@ var CoordInputForm = module.exports = React.createClass({
       onClick: function() {
         //submit values
         var allCoordinates = [];
-        var coordA, coordB;
+        var coordA, coordB, latStart, lngStart, latEnd, lngEnd;
         for (var i=0; i<that.props.coordCount; i++) {
           latStart = parseFloat(document.getElementById('inputLatStart'+i).value);
           lngStart = parseFloat(document.getElementById('inputLngStart'+i).value);
           latEnd = parseFloat(document.getElementById('inputLatEnd'+i).value);
           lngEnd = parseFloat(document.getElementById('inputLngEnd'+i).value);
-          allCoordinates.push([[latStart, lngStart], [latEnd, lngEnd]]);
+          if (latStart && lngStart && latEnd && lngEnd) {
+            allCoordinates.push([[latStart, lngStart], [latEnd, lngEnd]]);
+          }
         }
         console.log(allCoordinates); //send allCoordinates to server
         reqwest({
