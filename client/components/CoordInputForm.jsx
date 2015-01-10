@@ -1,8 +1,9 @@
 var React = require('react');
 var R = React.createElement;
-var reqwest = require('reqwest');
-var CoordInput = require('./CoordInput.jsx');
 var AppDispatcher = require('../dispatcher/AppDispatcher.js');
+var CoordInput = require('./CoordInput.jsx');
+var ConvertCoords = window.convertCoords = require('../helpers/ConvertCoords.js');
+var reqwest = require('reqwest');
 
 var CoordInputForm = module.exports = React.createClass({
   getInitialState: function() {
@@ -13,16 +14,19 @@ var CoordInputForm = module.exports = React.createClass({
   },
   getRouteInputs: function() {
     var allCoordinates = [];
-    var coordA, coordB, latStart, lngStart, latEnd, lngEnd;
+    var coordA, coordB, latStart, lngStart, latEnd, lngEnd, convertedStart, convertedEnd;
     for (var i=0; i<this.props.coordCount; i++) {
       latStart = parseFloat(document.getElementById('inputLatStart'+i).value);
       lngStart = parseFloat(document.getElementById('inputLngStart'+i).value);
       latEnd = parseFloat(document.getElementById('inputLatEnd'+i).value);
       lngEnd = parseFloat(document.getElementById('inputLngEnd'+i).value);
+      convertedStart = ConvertCoords.latLngToMercator({lat: latStart, lng: lngStart}, true);
+      convertedEnd = ConvertCoords.latLngToMercator({lat: latEnd, lng: lngEnd}, true);
       if (latStart && lngStart && latEnd && lngEnd) {
-        allCoordinates.push([[latStart, lngStart], [latEnd, lngEnd]]);
+        allCoordinates.push([convertedStart, convertedEnd]);
       }
     }
+    console.log(allCoordinates);
     return allCoordinates;
   },
   onAddInputClick: function() {
@@ -51,8 +55,17 @@ var CoordInputForm = module.exports = React.createClass({
         console.log(err);
       },
       success: function (resp) {
-        console.log(JSON.stringify(resp));
-        that.setState({route: resp, similarity: undefined});
+        console.log(resp);
+        var route = [];
+        resp.forEach(function(stop) {
+          var convertedPoint = ConvertCoords.mercatorToLatLng({
+            x: parseFloat(stop[0]),
+            y: parseFloat(stop[1])
+          }, true);
+          route.push(convertedPoint);
+        });
+        console.log(JSON.stringify(route));
+        that.setState({route: route, similarity: undefined});
       }
     });
   },
