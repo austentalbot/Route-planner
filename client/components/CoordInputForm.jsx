@@ -11,87 +11,80 @@ var CoordInputForm = module.exports = React.createClass({
       similarity: undefined
     };
   },
+  getRouteInputs: function() {
+    var allCoordinates = [];
+    var coordA, coordB, latStart, lngStart, latEnd, lngEnd;
+    for (var i=0; i<this.props.coordCount; i++) {
+      latStart = parseFloat(document.getElementById('inputLatStart'+i).value);
+      lngStart = parseFloat(document.getElementById('inputLngStart'+i).value);
+      latEnd = parseFloat(document.getElementById('inputLatEnd'+i).value);
+      lngEnd = parseFloat(document.getElementById('inputLngEnd'+i).value);
+      if (latStart && lngStart && latEnd && lngEnd) {
+        allCoordinates.push([[latStart, lngStart], [latEnd, lngEnd]]);
+      }
+    }
+    return allCoordinates;
+  },
+  onAddInputClick: function() {
+    var latStart = document.getElementById('inputLatStart' + (this.props.coordCount - 1)).value;
+    var lngStart = document.getElementById('inputLngStart' + (this.props.coordCount - 1)).value;
+    var latEnd = document.getElementById('inputLatEnd' + (this.props.coordCount - 1)).value;
+    var lngEnd = document.getElementById('inputLngEnd' + (this.props.coordCount - 1)).value;
+    //only add new input if the previous one is complete
+    if (latStart && lngStart && latEnd && lngEnd) {
+      AppDispatcher.handleViewAction({
+        actionType: 'INCREMENT_COORD_COUNT'
+      });
+    } else {
+      alert('Please input coordinates first');
+    }
+  },
+  onGenerateRouteClick: function() {
+    var that = this;
+    reqwest({
+      url: 'http://localhost:6007/generateRoute',
+      method: 'post',
+      data: {
+        coordinates: that.getRouteInputs()
+      },
+      error: function(err) {
+        console.log(err);
+      },
+      success: function (resp) {
+        console.log(JSON.stringify(resp));
+        that.setState({route: resp, similarity: undefined});
+      }
+    });
+  },
+  onCalculateSimilarityClick: function() {
+    var that = this;
+    reqwest({
+      url: 'http://localhost:6007/calculateSimilarity',
+      method: 'post',
+      data: {
+        coordinates: that.getRouteInputs()
+      },
+      error: function(err) {
+        console.log(err);
+      },
+      success: function (resp) {
+        console.log(JSON.stringify(resp));
+        that.setState({route: undefined, similarity: resp});
+      }
+    });
+  },
   render: function() {
     var that = this;
     var addButton = R('button', {
-      onClick: function() {
-        var latStart = document.getElementById('inputLatStart' + (that.props.coordCount - 1)).value;
-        var lngStart = document.getElementById('inputLngStart' + (that.props.coordCount - 1)).value;
-        var latEnd = document.getElementById('inputLatEnd' + (that.props.coordCount - 1)).value;
-        var lngEnd = document.getElementById('inputLngEnd' + (that.props.coordCount - 1)).value;
-        //only add new input if the previous one is complete
-        if (latStart && lngStart && latEnd && lngEnd) {
-          AppDispatcher.handleViewAction({
-            actionType: 'INCREMENT_COORD_COUNT'
-          });
-        } else {
-          alert('Please input coordinates first');
-        }
-      }
+      onClick: this.onAddInputClick
     }, 'Add path');
 
     var generateRouteButton = R('button', {
-      onClick: function() {
-        //submit values
-        var allCoordinates = [];
-        var coordA, coordB, latStart, lngStart, latEnd, lngEnd;
-        for (var i=0; i<that.props.coordCount; i++) {
-          latStart = parseFloat(document.getElementById('inputLatStart'+i).value);
-          lngStart = parseFloat(document.getElementById('inputLngStart'+i).value);
-          latEnd = parseFloat(document.getElementById('inputLatEnd'+i).value);
-          lngEnd = parseFloat(document.getElementById('inputLngEnd'+i).value);
-          if (latStart && lngStart && latEnd && lngEnd) {
-            allCoordinates.push([[latStart, lngStart], [latEnd, lngEnd]]);
-          }
-        }
-        console.log(allCoordinates);
-        reqwest({
-          url: 'http://localhost:6007/generateRoute',
-          method: 'post',
-          data: {
-            coordinates: allCoordinates
-          },
-          error: function(err) {
-            console.log(err);
-          },
-          success: function (resp) {
-            console.log(JSON.stringify(resp));
-            that.setState({route: resp, similarity: undefined});
-          }
-        });
-      }
+      onClick: this.onGenerateRouteClick
     }, 'Generate route');
 
     var calculateSimilarityButton = R('button', {
-      onClick: function() {
-        //submit values
-        var allCoordinates = [];
-        var coordA, coordB, latStart, lngStart, latEnd, lngEnd;
-        for (var i=0; i<that.props.coordCount; i++) {
-          latStart = parseFloat(document.getElementById('inputLatStart'+i).value);
-          lngStart = parseFloat(document.getElementById('inputLngStart'+i).value);
-          latEnd = parseFloat(document.getElementById('inputLatEnd'+i).value);
-          lngEnd = parseFloat(document.getElementById('inputLngEnd'+i).value);
-          if (latStart && lngStart && latEnd && lngEnd) {
-            allCoordinates.push([[latStart, lngStart], [latEnd, lngEnd]]);
-          }
-        }
-        console.log(allCoordinates); //send allCoordinates to server
-        reqwest({
-          url: 'http://localhost:6007/calculateSimilarity',
-          method: 'post',
-          data: {
-            coordinates: allCoordinates
-          },
-          error: function(err) {
-            console.log(err);
-          },
-          success: function (resp) {
-            console.log(JSON.stringify(resp));
-            that.setState({route: undefined, similarity: resp});
-          }
-        });
-      }
+      onClick: this.onCalculateSimilarityClick
     }, 'Calculate path similarity');
 
     var clearButton = R('button', {
