@@ -86,6 +86,21 @@ var CoordInputForm = module.exports = React.createClass({
       }
     });
   },
+  onClearClick: function() {
+    //reset state to show only one input
+    this.replaceState(this.getInitialState());
+
+    //reset coord count in store
+    AppDispatcher.handleViewAction({
+      actionType: 'RESET_COORD_COUNT'
+    });
+
+    //clear remaining input box
+    document.getElementById('inputLatStart0').value = '';
+    document.getElementById('inputLngStart0').value = '';
+    document.getElementById('inputLatEnd0').value = '';
+    document.getElementById('inputLngEnd0').value = '';
+  },
   render: function() {
     var that = this;
     var addButton = R('button', {
@@ -101,21 +116,7 @@ var CoordInputForm = module.exports = React.createClass({
     }, 'Calculate path similarity');
 
     var clearButton = R('button', {
-      onClick: function() {
-        //reset state to show only one input
-        that.replaceState(that.getInitialState());
-
-        //reset coord count in store
-        AppDispatcher.handleViewAction({
-          actionType: 'RESET_COORD_COUNT'
-        });
-
-        //clear remaining input box
-        document.getElementById('inputLatStart0').value = '';
-        document.getElementById('inputLngStart0').value = '';
-        document.getElementById('inputLatEnd0').value = '';
-        document.getElementById('inputLngEnd0').value = '';
-      }
+      onClick: this.onClearClick
     }, 'Clear');
 
     var route = '';
